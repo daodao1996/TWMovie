@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="./jquery/jquery-3.2.1.js"></script>
+    <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <title>查询结果</title>
+    <style>
+        .round {
+            padding:0px;
+            border: 5px solid #dedede;    -moz-border-radius: 15px;
+            /* Gecko browsers */
+            -webkit-border-radius: 15px;
+            /* Webkit browsers */
+            border-radius:15px;
+        }
+        a:visited {text-decoration:none;} /*已访问：无下划线*/
+        a:hover {text-decoration:none;} /*鼠标移近：无下划线*/
+    </style>
+</head>
+<body onload="load()">
+<div style="background-color: #e0f0f3;width: 100%;height: 100%">
+    <div class="row" style="background-color: #0f0f0f">
+        <div class="col-xs-1 col-md-1" style="width: 126px"><a href="/film.html"><h3 style="margin-top: 12px;color: #9d9d9d">思沃影院</h3></a></div>
+        <div class="col-xs-2 col-md-2" style="margin-top: 8px"><input type="text" class="form-control" placeholder="Search for..." id="keyWord"></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px"><button class="round" onclick="gotoSearch()">搜索</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px;width: 120px"><button class="round" value="rating" onclick="order(this)">按评分排序</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px;width: 120px"><button class="round" value="year" onclick="order(this)">按年代排序</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 8px">
+            <select class="form-control" id="wayOption">
+                <option value="ASC">升序</option>
+                <option value="DESC">降序</option>
+            </select>
+        </div>
+        <div class="col-xs-2 col-md-2" style="margin-left: -3%;margin-top: 0.3%">
+            <p style="margin-top: 12px;color: #9d9d9d;position: absolute;right: 10px" id="loginState">。。。。。。。。已登录</p >
+        </div>
+        <div class="col-xs-2 col-md-2" style="margin-top: 11px;position: absolute;right: 0px">
+            <button class="round" id="login">登录</button>
+            <button class="round" id="signUp">注册</button>
+            <button class="round" id="signOut">退出</button>
+        </div>
+    </div>
+<br><br><br/>
+<div id="result">
+
+</div>
+
+    <div id="buquan"></div>
+</div>
+</body>
+<script type="text/javascript" src="./js/searchResult.js"></script>
+</html>

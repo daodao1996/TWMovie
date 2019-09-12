@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>TWMovie</title>
+    <script src="http://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+    <link href="http://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+    <script src="http://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="./jquery/jquery-3.2.1.js"></script>
+    <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="">
+    <!--<script type="text/javascript" src="./jquery/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="./js/scrolltopcontrol.js"></script>-->
+    <style type="text/css" media="screen">
+        html, body {
+            width: 100%;
+        }
+        ul li {
+            list-style: none;
+        }
+        *{margin:0;padding:0;}
+        #box {
+            width: 1200px;
+            margin: 20px auto;
+        }
+        .slide {
+            height: 500px;
+            position: relative;
+        }
+        .slide ul {
+            height: 100%;
+        }
+        .slide li {
+            position: absolute;
+            left:200px;
+            top:0;
+        }
+        .slide li img{
+            width: 100%;
+        }
+        .arraw {
+            opacity: 0;
+        }
+        .arraw a {
+            width: 70px;
+            height: 110px;
+            display: block;
+            position: absolute;
+            top: 50%;
+            margin-top: -55px;
+            z-index: 999;
+        }
+        .next {
+            background: url(images/right.png) no-repeat;
+            right: -10px;
+            /*opacity: .5;*/
+            /*filter: alpha(opacity=50);*/
+        }
+        .prev {
+            background: url(images/left.png) no-repeat;
+            left: -10px;
+        }
+
+        a:visited {text-decoration:none;} /*已访问：无下划线*/
+        a:hover {text-decoration:none;} /*鼠标移近：无下划线*/
+    </style>
+
+    <style>
+        .round {
+            padding:0px;
+            border: 5px solid #dedede;    -moz-border-radius: 15px;
+            /* Gecko browsers */
+            -webkit-border-radius: 15px;
+            /* Webkit browsers */
+            border-radius:15px;
+        }
+    </style>
+</head>
+<body onload="getKinds()">
+<div style="background: url(images/bg3.jpg)">
+    <div class="row" style="background-color: #0f0f0f">
+        <div class="col-xs-1 col-md-1"></div>
+        <div class="col-xs-1 col-md-1" style="width: 126px"><h3 style="margin-top: 12px;color: #9d9d9d">思沃影院</h3></div>
+        <div class="col-xs-2 col-md-2" style="margin-top: 8px"><input type="text" class="form-control" placeholder="Search for..." id="keyWord"></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px"><button class="round" id="search">搜索</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px;width: 120px"><button class="round" onclick="order(this)" value="rating">按评分排序</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 11px;width: 120px"><button class="round" onclick="order(this)" value="year">按年代排序</button></div>
+        <div class="col-xs-1 col-md-1" style="margin-top: 8px">
+            <select class="form-control" id="wayOption">
+                <option value="ASC">升序</option>
+                <option value="DESC">降序</option>
+            </select>
+        </div>
+        <div class="col-xs-2 col-md-2" style="margin-left: -3%;margin-top: 0.3%">
+            <p style="margin-top: 12px;color: #9d9d9d;position: absolute;right: 10px" id="loginState"></p >
+        </div>
+
+        <div class="col-xs-2 col-md-2" style="margin-top: 11px;position: absolute;right: 0px">
+            <button class="round" id="login">登录</button>
+            <button class="round" id="signUp">注册</button>
+            <button class="round" id="signOut">退出</button>
+        </div>
+    </div>
+    <div id="box">
+        <div class="slide">
+            <ul>
+                <li><a href="/detail.html?id=1291571"><h3 style="color: #c7ddef">指环王</h3><img src="images/zhw.jpg" alt=""></a></li>
+                <li><a href="/detail.html?id=1292402"><h3 style="color: #c7ddef">西西里的美丽传说</h3><img src="images/xxl.jpg" alt=""></a></li>
+                <li><a href="/detail.html?id=25662329"><h3 style="color: #c7ddef">疯狂动物城</h3><img src="images/dwc.jpg" alt=""></a></li>
+                <li><a href="/detail.html?id=1292722"><h3 style="color: #c7ddef">泰坦尼克号</h3><img src="images/ttnk.jpg" alt=""></a></li>
+                <li><a href="/detail.html?id=2353023"><h3 style="color: #c7ddef">驯龙高手</h3><img src="images/xlgs.jpg" alt=""></a></li>
+            </ul>
+            <div class="arraw">
+                <a href="javascript:;" class="next"></a>
+                <a href="javascript:;" class='prev'></a>
+            </div>
+        </div>
+    </div>
+    <script>
+        var box = document.querySelector('#box');
+        var slide = document.querySelector('.slide');
+        var arraw = document.querySelector('.arraw');
+        var lis = document.querySelectorAll('li');
+        var json = [  //  包含了5张图片里面所有的样式
+            {   //  1
+                width:400,
+                top:20,
+                left:100,
+                opacity:20,//不透明级别
+                z:2,
+                id:1
+            },
+            {  // 2
+                width:600,
+                top:70,
+                left:50,
+                opacity:60,
+                z:3,
+                id:2
+            },
+            {   // 3
+                width:800,
+                top:100,
+                left:200,
+                opacity:100,
+                z:4,
+                id:3
+            },
+            {  // 4
+                width:600,
+                top:70,
+                left:550,
+                opacity:60,
+                z:3,
+                id:4
+            },
+            {   //5
+                width:400,
+                top:20,
+                left:650,
+                opacity:20,
+                z:2,
+                id:5
+            }
+        ];
+        box.addEventListener('mouseover', function(){
+            animate(arraw, {opacity: 100});
+        });
+        box.addEventListener('mouseout', function(){
+            animate(arraw, {opacity: 0});
+        });
+
+        var next = document.querySelector('.next');
+        var prev = document.querySelector('.prev');
+        var timer = null;
+        var flag = true;
+        next.addEventListener('click', function(){
+            clearInterval(timer);
+            if(flag == true){
+                move(true);
+                flag = false;
+            }
+        });
+        next.addEventListener('mouseleave', function(){
+            clearInterval(timer);
+            run();
+        });
+        prev.addEventListener('click', function(){
+            clearInterval(timer);
+            if(flag == true){
+                move(false);
+                flag = false;
+            }
+        });
+        prev.addEventListener('mouseleave', function(){
+            run();
+        });
+
+        move();
+        run();
+        function run(){
+            clearInterval(timer);
+            timer = setInterval(function(){
+                if(flag == true){
+                    flag = false;
+                    move(true);
+                }
+            },500);
+        }
+
+        function move(x){
+            if(x != undefined){
+                if(x){
+                    json.push(json.shift());
+                }else{
+                    json.unshift(json.pop());
+                };
+            };
+
+            for(var i = 0; i<json.length; i++){
+                animate(lis[i],{
+                    width: json[i].width,
+                    top: json[i].top,
+                    left: json[i].left,
+                    opacity: json[i].opacity,
+                    zIndex: json[i].z
+                },function(){flag = true;})
+            };
+        }
+
+        function animate(obj, json, callback){
+            clearInterval(obj.timers);
+            obj.timers = setInterval(function(){
+                var stoped = true;
+                for(var k in json){
+                    var leader = 0;
+                    if(k == 'opacity'){
+                        leader = Math.round(getStyle(obj, k)*100) || 100;
+                    }else {
+                        leader = parseInt(getStyle(obj, k)) || 0;
+                    };
+                    var step = (json[k]-leader)/10;
+                    step = step > 0? Math.ceil(step) : Math.floor(step);
+                    leader = leader + step;
+                    if(k == 'opacity'){
+                        obj.style[k] = leader/100;
+                        obj.style['filter'] = 'alpha(opacity='+ leader +')';
+                    }else if(k == 'zIndex'){
+                        obj.style['zIndex'] = json[k];
+                    }else{
+                        obj.style[k] = leader + "px";
+                    }
+                    if(leader != json[k]){
+                        stoped = false;
+                    }
+                };
+                if(stoped){
+                    clearInterval(obj.timers);
+                    callback && callback();
+                };
+            },50);
+        };
+        function getStyle(obj, attr){
+            if(obj.currentStyle){
+                return obj.currentStyle[attr];
+            }else{
+                return window.getComputedStyle(obj, null)[attr];
+            };
+        };
+    </script>
+</div >
+<div  style="background-color: #e0f0f3">
+<h4><strong><center><div style="width: 57%;margin-left: 100px;margin-top: 10px;text-align:right">
+    <ul class="nav nav-tabs" id="kindList"></ul>
+</div></center></strong></h4>
+
+<div id="detail">
+
+</div>
+</div>
+
+
+</body>
+<script type="text/javascript" src="./js/film.js"></script>
+</html>
